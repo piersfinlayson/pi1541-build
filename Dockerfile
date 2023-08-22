@@ -71,6 +71,13 @@ RUN cd /output/ && \
 RUN echo "kernel_address=0x1f00000" > /output/config.txt && \
     echo "force_turbo=1" >> /output/config.txt
 
+# Temporarily use the pre-built kernel.img as that works and the one built by this Dockerfile doesn't
+RUN cd /output/ && \
+    wget https://cbm-pi1541.firebaseapp.com/kernel.zip && \
+    rm kernel.img && \
+    unzip kernel.zip && \
+    rm kernel.zip
+
 # Set file permissions on output files
 RUN chmod -R 777 /output/
 
@@ -78,12 +85,6 @@ RUN chmod -R 777 /output/
 RUN cd /output/ && \
     tar cvf /pi1541.tar ./* && \
     ls -ltra /
-
-# Temporarily use the pre-built kernel.img as that works and the one built by this Dockerfile doesn't
-RUN cd /output/ && \
-    wget https://cbm-pi1541.firebaseapp.com/kernel.zip && \
-    unzip kernel.zip && \
-    rm kernel.zip
 
 # Do nothing (allows host scripts to copy files from /output/
 VOLUME ['output']
