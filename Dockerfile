@@ -66,6 +66,10 @@ RUN cd /output/ && \
     wget https://raw.githubusercontent.com/libretro/vice-libretro/master/vice/data/DRIVES/dos1541-325302-01+901229-05.bin -O /output/dos1541 && \
     wget https://raw.githubusercontent.com/libretro/vice-libretro/master/vice/data/C64/chargen-901225-01.bin -O /output/chargen
 
+# Create config.txt
+RUN echo "kernel_address=0x1f00000" > /output/config.txt && \
+    echo "force_turbo=1" >> /output/config.txt
+
 # Set file permissions on output files
 RUN chmod -R 777 /output/
 
