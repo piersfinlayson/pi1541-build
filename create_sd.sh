@@ -30,7 +30,7 @@ tar xf $FILES_DIR/pi1541.tar -C $FILES_DIR
 sudo wipefs -q --all --force $SDCARD
 sudo parted -s $SDCARD mklabel msdos
 sudo parted -s $SDCARD mkpart primary fat32 1MiB 100%
-sudo mkfs -t vfat /dev/sdh1 1> /dev/null
+sudo mkfs -t vfat ${SDCARD}1 1> /dev/null
 
 # Mount the SD card and copy the files over
 MNT_DIR=/tmp/pi1541-sd
