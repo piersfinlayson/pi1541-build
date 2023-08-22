@@ -11,7 +11,7 @@ RUN apt update && \
         git \
         libnewlib-arm-none-eabi \
         libstdc++-arm-none-eabi-newlib \
-        unzip && \
+        unzip \
         vim \
         wget && \
     apt clean && \
