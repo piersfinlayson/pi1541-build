@@ -13,7 +13,7 @@ fi
 
 # Make container image to provide all the necessary files
 IMG_NAME=pi1541-img
-docker build . -q -t $IMG_NAME &> /dev/null
+docker build . -q -t $IMG_NAME 1> /dev/null
 
 # Get the files out of the container image
 CONT_NAME=pi1541-cont
@@ -21,15 +21,16 @@ FILES_DIR=/tmp/pi1541-files
 rm -fr $FILES_DIR
 docker rm -f $CONT_NAME 2>/dev/null
 mkdir $FILES_DIR
-docker run -qd --name $CONT_NAME $IMG_NAME &> /dev/null
+docker run -qd --name $CONT_NAME $IMG_NAME 1> /dev/null
 docker cp -q $CONT_NAME:/pi1541.tar $FILES_DIR
-docker rm -f $CONT_NAME &> /dev/null
+docker rm -f $CONT_NAME 1> /dev/null
 tar xf $FILES_DIR/pi1541.tar -C $FILES_DIR
 
 # Format the SD card
 sudo wipefs -q --all --force $SDCARD
 sudo parted -s $SDCARD mklabel msdos
 sudo parted -s $SDCARD mkpart primary fat32 1MiB 100%
+sudo mkfs -t vfat /dev/sdh1 1> /dev/null
 
 # Mount the SD card and copy the files over
 MNT_DIR=/tmp/pi1541-sd
