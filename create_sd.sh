@@ -25,6 +25,7 @@ docker run -qd --name $CONT_NAME $IMG_NAME 1> /dev/null
 docker cp -q $CONT_NAME:/pi1541.tar $FILES_DIR
 docker rm -f $CONT_NAME 1> /dev/null
 tar xf $FILES_DIR/pi1541.tar -C $FILES_DIR
+rm $FILES_DIR/pi1541.tar
 
 # Format the SD card
 sudo wipefs -q --all --force $SDCARD
