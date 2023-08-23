@@ -24,15 +24,15 @@ RUN cd /builds && \
 
 # Install ARM GNU toolchain
 RUN cd /builds && \
-    wget "https://developer.arm.com/-/media/Files/downloads/gnu-a/8.3-2019.03/binrel/gcc-arm-8.3-2019.03-x86_64-arm-eabi.tar.xz?revision=402e6a13-cb73-48dc-8218-ad75d6be0e01&rev=402e6a13cb7348dc8218ad75d6be0e01&hash=2879F858317CC3D52FF3DD4B9B9F17CD" -O gcc-arm-8.3-2019.03-x86_64-arm-eabi.tar.xz && \
-    unxz gcc-arm-8.3-2019.03-x86_64-arm-eabi.tar.xz && \
-    tar xf gcc-arm-8.3-2019.03-x86_64-arm-eabi.tar
+    wget "https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz?revision=64186c5d-b471-4c97-a8f5-b1b300d6594a&rev=64186c5db4714c97a8f5b1b300d6594a&hash=D299A6E685935CD2806F846E4D52BD8B" -O gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz && \
+    unxz gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz && \
+    tar xf gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar
+ENV PREFIX=/builds/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi/bin/arm-none-eabi-
 
 # Build kernel.img
 RUN cd /builds && \
     git clone https://github.com/pi1541/Pi1541 && \
     cd Pi1541/ && \
-    export PREFIX=/builds/gcc-arm-8.3-2019.03-x86_64-arm-eabi/bin/arm-eabi- && \
     make && \
     cp kernel.img /output/ 
 
