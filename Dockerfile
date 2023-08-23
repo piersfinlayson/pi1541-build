@@ -24,18 +24,17 @@ RUN cd /builds && \
 
 # Install ARM GNU toolchain
 RUN cd /builds && \
-    wget "https://developer.arm.com/-/media/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz?rev=dccb66bb394240a98b87f0f24e70e87d&hash=B788763BE143D9396B59AA91DBA056B6" -O arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz && \
-    unxz arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz && \
-    tar xf arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar 
+    wget "https://developer.arm.com/-/media/Files/downloads/gnu-a/8.3-2019.03/binrel/gcc-arm-8.3-2019.03-x86_64-arm-eabi.tar.xz?revision=402e6a13-cb73-48dc-8218-ad75d6be0e01&rev=402e6a13cb7348dc8218ad75d6be0e01&hash=2879F858317CC3D52FF3DD4B9B9F17CD" -O gcc-arm-8.3-2019.03-x86_64-arm-eabi.tar.xz && \
+    unxz gcc-arm-8.3-2019.03-x86_64-arm-eabi.tar.xz && \
+    tar xf gcc-arm-8.3-2019.03-x86_64-arm-eabi.tar
 
 # Build kernel.img
 RUN cd /builds && \
-    git clone https://github.com/piersfinlayson/Pi1541 && \
+    git clone https://github.com/pi1541/Pi1541 && \
     cd Pi1541/ && \
-    export PREFIX=/builds/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi- && \
+    export PREFIX=/builds/gcc-arm-8.3-2019.03-x86_64-arm-eabi/bin/arm-eabi- && \
     make && \
-    cp kernel.img /output/ && \
-    cp options.txt /output/
+    cp kernel.img /output/ 
 
 # Build CBM File Browser
 ENV ACME=/builds/acme/src/acme
@@ -51,7 +50,8 @@ RUN cd /builds/Pi1541/CBM-FileBrowser_v1.6/sources/ && \
     cp fb64.prg fb64dtv.prg fb20.prg fb20-3k.prg fb20-8k.prg fb20-mc.prg fb16.prg fb128.prg /output/1541/
 
 # Modify options.txt for my Pi1541 Hat (Option B)
-RUN sed -i -- 's/\/\/splitIECLines = 1/splitIECLines = 1/' /output/options.txt && \
+RUN cp /builds/Pi1541/options.txt /output/ && \
+    sed -i -- 's/\/\/splitIECLines = 1/splitIECLines = 1/' /output/options.txt && \
     sed -i -- 's/\/\/LCDName = ssd1306_128x64/LCDName = ssd1306_128x64/' /output/options.txt && \
     sed -i -- 's/\/\/SoundOnGPIO = 1/SoundOnGPIO = 1/' /output/options.txt && \
     sed -i -- 's/\/\/SoundOnGPIODuration = 100/SoundOnGPIODuration = 1000/' /output/options.txt && \

@@ -41,7 +41,7 @@ sudo mount ${SDCARD}1 $MNT_DIR
 sudo cp -r $FILES_DIR/* $MNT_DIR/
 echo "All files created on SD Card: $SDCARD"
 cd $MNT_DIR
-find .
+find . -type f | xargs ls -ltr
 sleep 1
 sudo umount -l ${SDCARD}1
 rm -r $MNT_DIR
