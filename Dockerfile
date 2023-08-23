@@ -5,13 +5,8 @@ LABEL website="https://piers.rocks"
 RUN apt update && \
     DEBIAN_FRONTEND=noninteractive apt -y upgrade && \
     DEBIAN_FRONTEND=noninteractive apt install -y \
-        binutils-arm-none-eabi \
         build-essential \
-        gcc-arm-none-eabi \
         git \
-        libnewlib-arm-none-eabi \
-        libstdc++-arm-none-eabi-newlib \
-        unzip \
         vim \
         wget && \
     apt clean && \
@@ -27,10 +22,18 @@ RUN cd /builds && \
     cd acme/src/ && \
     make 
 
+# Install ARM GNU toolchain
+RUN cd /builds && \
+    wget "https://developer.arm.com/-/media/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz?rev=dccb66bb394240a98b87f0f24e70e87d&hash=B788763BE143D9396B59AA91DBA056B6" -O arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz && \
+    unxz arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz && \
+    tar xf arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar 
+
 # Build kernel.img
 RUN cd /builds && \
-    git clone https://github.com/pi1541/pi1541 && \
+    git clone https://github.com/piersfinlayson/pi1541 && \
     cd pi1541/ && \
+    export PREFIX=/builds/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi- && \
+    cat ./Makefile.rules && \
     make && \
     cp kernel.img /output/ && \
     cp options.txt /output/
@@ -70,13 +73,6 @@ RUN cd /output/ && \
 # Create config.txt
 RUN echo "kernel_address=0x1f00000" > /output/config.txt && \
     echo "force_turbo=1" >> /output/config.txt
-
-# Temporarily use the pre-built kernel.img as that works and the one built by this Dockerfile doesn't
-RUN cd /output/ && \
-    wget https://cbm-pi1541.firebaseapp.com/kernel.zip && \
-    rm kernel.img && \
-    unzip kernel.zip && \
-    rm kernel.zip
 
 # Set file permissions on output files
 RUN chmod -R 777 /output/
