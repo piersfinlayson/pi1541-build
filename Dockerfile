@@ -33,7 +33,6 @@ RUN cd /builds && \
     git clone https://github.com/piersfinlayson/pi1541 && \
     cd pi1541/ && \
     export PREFIX=/builds/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi- && \
-    cat ./Makefile.rules && \
     make && \
     cp kernel.img /output/ && \
     cp options.txt /output/
