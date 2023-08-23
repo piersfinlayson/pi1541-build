@@ -30,8 +30,8 @@ RUN cd /builds && \
 
 # Build kernel.img
 RUN cd /builds && \
-    git clone https://github.com/piersfinlayson/pi1541 && \
-    cd pi1541/ && \
+    git clone https://github.com/piersfinlayson/Pi1541 && \
+    cd Pi1541/ && \
     export PREFIX=/builds/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi- && \
     make && \
     cp kernel.img /output/ && \
@@ -39,7 +39,7 @@ RUN cd /builds && \
 
 # Build CBM File Browser
 ENV ACME=/builds/acme/src/acme
-RUN cd /builds/pi1541/CBM-FileBrowser_v1.6/sources/ && \
+RUN cd /builds/Pi1541/CBM-FileBrowser_v1.6/sources/ && \
     $ACME --cpu 6502 -f cbm -o fb64.prg c64.asm && \
     $ACME --cpu 6502 -f cbm -o fb64dtv.prg c64dtv.asm && \
     $ACME --cpu 6502 -f cbm -o fb20.prg vic20-unexp.asm && \
