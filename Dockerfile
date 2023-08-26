@@ -23,16 +23,23 @@ RUN cd /builds && \
     make 
 
 # Install ARM GNU toolchain
+ENV TOOLCHAIN="arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi"
+ENV TOOLCHAIN_URL="https://developer.arm.com/-/media/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz?rev=dccb66bb394240a98b87f0f24e70e87d&hash=B788763BE143D9396B59AA91DBA056B6"
+ENV TOOLCHAIN_PREFIX="arm-none-eabi-"
 RUN cd /builds && \
-    wget "https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz?revision=64186c5d-b471-4c97-a8f5-b1b300d6594a&rev=64186c5db4714c97a8f5b1b300d6594a&hash=D299A6E685935CD2806F846E4D52BD8B" -O gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz && \
-    unxz gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar.xz && \
-    tar xf gcc-arm-9.2-2019.12-x86_64-arm-none-eabi.tar
-ENV PREFIX=/builds/gcc-arm-9.2-2019.12-x86_64-arm-none-eabi/bin/arm-none-eabi-
+    wget "${TOOLCHAIN_URL}" -O ${TOOLCHAIN}.tar.xz && \
+    unxz ${TOOLCHAIN}.tar.xz && \
+    tar xf ${TOOLCHAIN}.tar
+ENV PREFIX=/builds/${TOOLCHAIN}/bin/${TOOLCHAIN_PREFIX}
 
 # Build kernel.img
+ARG RASPPI_TYPE=3
+ENV RASPPI=${RASPPI_TYPE}
 RUN cd /builds && \
-    git clone https://github.com/pi1541/Pi1541 && \
+    git clone https://github.com/piersfinlayson/Pi1541 && \
     cd Pi1541/ && \
+    echo "RASPPI=${RASPPI}" && \
+    echo "PREFIX=${PREFIX}" && \
     make && \
     cp kernel.img /output/ 
 
