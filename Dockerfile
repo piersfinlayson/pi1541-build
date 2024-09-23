@@ -23,8 +23,8 @@ RUN cd /builds && \
     make 
 
 # Install ARM GNU toolchain
-ENV TOOLCHAIN="arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi"
-ENV TOOLCHAIN_URL="https://developer.arm.com/-/media/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-arm-none-eabi.tar.xz?rev=dccb66bb394240a98b87f0f24e70e87d&hash=B788763BE143D9396B59AA91DBA056B6"
+ENV TOOLCHAIN="arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi"
+ENV TOOLCHAIN_URL="https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz"
 ENV TOOLCHAIN_PREFIX="arm-none-eabi-"
 RUN cd /builds && \
     wget "${TOOLCHAIN_URL}" -O ${TOOLCHAIN}.tar.xz && \
@@ -36,7 +36,7 @@ ENV PREFIX=/builds/${TOOLCHAIN}/bin/${TOOLCHAIN_PREFIX}
 ARG RASPPI_TYPE=3
 ENV RASPPI=${RASPPI_TYPE}
 RUN cd /builds && \
-    git clone https://github.com/piersfinlayson/Pi1541 && \
+    git clone https://github.com/pi1541/Pi1541 && \
     cd Pi1541/ && \
     echo "RASPPI=${RASPPI}" && \
     echo "PREFIX=${PREFIX}" && \
